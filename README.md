@@ -32,7 +32,7 @@ Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 
 <p align="center">
   <a href="docs/assets/qwen3-4b-size-quality.png">
-    <img src="docs/assets/qwen3-4b-size-quality.png" alt="Qwen3-4B: complete GGUF size versus KL divergence to FP16" width="640">
+    <img src="docs/assets/qwen3-4b-size-quality.png" alt="Qwen3-4B: complete GGUF size versus KL divergence to FP16" width="900">
   </a>
 </p>
 
