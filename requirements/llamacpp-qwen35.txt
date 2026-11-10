@@ -1,0 +1,12 @@
+numpy==2.3.5
+torch==2.11.0
+triton==3.6.0
+transformers==5.9.0
+accelerate==1.15.0
+safetensors>=0.8
+huggingface-hub==1.17.0
+datasets==5.0.1
+tqdm>=4.27
+pyyaml>=5.1
+requests>=2.25
+sentencepiece==0.2.2

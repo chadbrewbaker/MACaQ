@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "macaq-mxfp4"
+version = "0.1.0"
+description = "Model agnostic calibrated quantization for text and diffusion models"
+requires-python = ">=3.10"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+
+[project.entry-points."vllm.general_plugins"]
+macaq_mxfp4 = "macaq_plugin:register"
+
+[tool.setuptools]
+py-modules = ["vllm_macaq_mxfp4_plugin", "macaq_plugin", "macaq_modern_plugin", "triton_mxfp4_moe", "triton_mxfp4_moe_decode", "triton_mxfp4_dense", "cudnn_mxfp4_dense", "macaq_env", "macaq_validation", "macaq_weight_only", "macaq_hybrid", "macaq_expert_layout"]
+
+[tool.setuptools.package-dir]
+"" = "vllm"

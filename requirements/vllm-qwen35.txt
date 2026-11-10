@@ -1,0 +1,10 @@
+-r quant.txt
+-r vllm-base.txt
+torch==2.11.0
+triton==3.6.0
+transformers==5.9.0
+flashinfer-python==0.6.8.post1
+datasets==5.0.1
+accelerate==1.15.0
+huggingface-hub==1.17.0
+numpy==2.3.5

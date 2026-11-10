@@ -1,0 +1,6 @@
+vllm==0.20.2
+torch>=2.7
+triton>=3.2
+flashinfer-python
+datasets
+numpy

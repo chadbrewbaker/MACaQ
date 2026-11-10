@@ -1,0 +1,8 @@
+torch>=2.7
+triton>=3.2
+transformers>=4.57
+datasets
+safetensors
+accelerate
+tqdm
+numpy

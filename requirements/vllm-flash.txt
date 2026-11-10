@@ -1,0 +1,8 @@
+vllm==0.30.0
+torch==2.13.0
+triton==3.7.1
+transformers==5.20.2
+accelerate==1.15.0
+safetensors==0.8.0
+numpy==2.3.5
+pillow==13.0.0

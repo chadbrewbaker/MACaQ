@@ -1,0 +1,11 @@
+qwen-tts==0.1.1
+torch==2.11.0
+torchaudio==2.11.0
+triton==3.6.0
+transformers==4.57.3
+accelerate==1.12.0
+numpy>=2.2,<2.4
+datasets==5.0.1
+safetensors>=0.8
+soundfile>=0.13
+tqdm

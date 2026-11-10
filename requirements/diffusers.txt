@@ -1,0 +1,14 @@
+torch==2.11.0
+triton==3.6.0
+diffusers==0.39.0
+transformers==4.57.6
+accelerate==1.15.0
+safetensors>=0.8
+numpy==2.2.6
+pillow>=10
+ftfy>=6.3
+soundfile>=0.13
+torchsde==0.2.6
+imageio[ffmpeg]>=2.37
+datasets==5.0.1
+tqdm

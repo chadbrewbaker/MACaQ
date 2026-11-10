@@ -1,0 +1,13 @@
+MACaQ
+Copyright (c) 2026 the MACAQ authors
+
+This repository includes a modified copy of ggml-org/llama.cpp.
+Base revision: 8663224248, recorded by vendor import
+db743521be8899e04385177ff9dc479e375f36e6.
+Location: llamacpp/llama.cpp
+The original license is retained at llamacpp/llama.cpp/LICENSE.
+MACaQ modifications include calibrated activation transforms, GGUF metadata
+handling, and optional fused activation preprocessing.
+
+Third-party dependencies, model weights and datasets retain their own terms.
+The MACaQ Apache-2.0 license does not relicense those components or runtimes.
