@@ -8,7 +8,7 @@
 - [Hybrid text models](#hybrid-text-models)
 - [Mixture of experts](#mixture-of-experts)
 - [Load and generate](#load-and-generate)
-- [Faster GPU inference](#faster-gpu-inference)
+- [Faster inference](#faster-inference)
 - [Formats](#formats)
 
 Supports dense Qwen3, Qwen3.8-27B and the listed
@@ -154,7 +154,7 @@ Compile grouped preprocessing and generate from the saved GGUF:
   --gpu 0 --gpu-layers 99 --prompt 'What is 17 plus 26? Return only the result.'
 ```
 
-See [kernel setup](../llamacpp/README.md#faster-gpu-inference) for `--pdl`
+See [kernel setup](../llamacpp/README.md#faster-inference) for `--pdl`
 compatibility. `--gpus 0,1` splits native calibration and expert refinement
 across two GPUs when needed. The final GGUF loads without the original HF
 weights, calibration GGUF or reservoir file.
@@ -212,7 +212,7 @@ Loading does not repeat calibration. Generation uses the saved chat template
 and greedy sampling; add `--thinking` to enable thinking. Compatible published
 GGUFs can also be loaded with `run`.
 
-## Faster GPU inference
+## Faster inference
 
 For a model quantized with `--had-block 64`, compile preprocessing kernels
 once for the inference device:
