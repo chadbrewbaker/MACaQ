@@ -7,6 +7,8 @@
 - [Quantize and save](#quantize-and-save)
 - [Hybrid text models](#hybrid-text-models)
 - [Mixture of experts](#mixture-of-experts)
+- [Qwen3.6-35B-A3B](#qwen36-35b-a3b)
+- [Flash-Next](#flash-next)
 - [Load and generate](#load-and-generate)
 - [Faster inference](#faster-inference)
 - [Formats](#formats)
@@ -106,7 +108,7 @@ The native MoE adapter supports IQ4_XS and IQ4_NL:
 |:---|:---|:---|
 | Qwen3-30B-A3B | [Qwen/Qwen3-30B-A3B](https://huggingface.co/Qwen/Qwen3-30B-A3B) | Apache-2.0 |
 | Qwen3-Coder-30B-A3B | [Qwen/Qwen3-Coder-30B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) | Apache-2.0 |
-| Qwen3.6-35B-A3B | [Qwen/Qwen3.6-35B-A3B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B) | Apache-2.0 |
+| [Qwen3.6-35B-A3B](#qwen36-35b-a3b) | [Qwen/Qwen3.6-35B-A3B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B) | Apache-2.0 |
 | OLMoE-1B-7B | [allenai/OLMoE-1B-7B-0125-Instruct](https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct) | Apache-2.0 |
 | Qwen3-Next-80B-A3B | [Qwen/Qwen3-Next-80B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) | Apache-2.0 |
 | Qwen3.8-Flash-Next | [Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | Qwen Community 1.0 |
@@ -159,8 +161,70 @@ compatibility. `--gpus 0,1` splits native calibration and expert refinement
 across two GPUs when needed. The final GGUF loads without the original HF
 weights, calibration GGUF or reservoir file.
 
+### Qwen3.6-35B-A3B
+
 <details>
-<summary><strong>Flash-Next quantization</strong></summary>
+<summary><strong>Quantize and generate</strong></summary>
+
+After [installation](#install), download the original checkpoint:
+
+```bash
+.venv-llamacpp/bin/python -m pip install -r requirements/llamacpp-qwen35.txt
+.venv-llamacpp/bin/python - <<'PYMODEL'
+from huggingface_hub import snapshot_download
+snapshot_download(
+    "Qwen/Qwen3.6-35B-A3B",
+    revision="995ad96eacd98c81ed38be0c5b274b04031597b0",
+    allow_patterns=["*.safetensors", "*.json", "*.txt", "*.model", "*.jinja", "LICENSE*"],
+    local_dir="models/qwen36-source",
+)
+PYMODEL
+```
+
+Generate calibration text and convert the same source to FP16:
+
+```bash
+python3.12 examples/make_moe_calibration.py --profile diverse \
+  --seed 617029 --count 6000 --output data/qwen36-calibration.txt
+.venv-llamacpp/bin/python llamacpp/llama.cpp/convert_hf_to_gguf.py \
+  models/qwen36-source --no-mtp --outtype f16 --outfile models/qwen36-f16.gguf
+```
+
+Quantize to IQ4_XS with four refinement passes:
+
+```bash
+.venv-llamacpp/bin/python llamacpp/macaq.py quantize-moe \
+  --hf models/qwen36-source --teacher models/qwen36-f16.gguf \
+  --calibration data/qwen36-calibration.txt --output models/qwen36-macaq.gguf \
+  --work-dir work/qwen36 --format IQ4_XS --gpus 0 --gpu-layers 99 \
+  --context 512 --ubatch 128 --chunks 256 --sample-rows 128 \
+  --sample-budget-gib 32 --min-expert-tokens 32 --vq-sweeps 4
+```
+
+Allow about 220 GB of working disk space, including the original weights,
+FP16 conversion, calibration samples and output. The saved GGUF is about
+18.86 GB. Use fresh output and work paths; add `--resume` after an interruption.
+Reduce `--gpu-layers` if the calibration model does not fit in device memory.
+
+Compile preprocessing and generate from the saved model:
+
+```bash
+.venv-llamacpp/bin/python llamacpp/compile_kernels.py \
+  --output work/qwen36-kernels --gpu 0 --moe --pdl
+.venv-llamacpp/bin/python llamacpp/macaq.py run \
+  --model models/qwen36-macaq.gguf --kernel-dir work/qwen36-kernels \
+  --gpu 0 --gpu-layers 99 --prompt 'Explain how a rainbow forms.'
+```
+
+See [kernel setup](#faster-inference) for `--pdl` compatibility. The saved
+GGUF loads without the original checkpoint or calibration files.
+
+</details>
+
+### Flash-Next
+
+<details>
+<summary><strong>Quantize and generate</strong></summary>
 
 Download the original source first:
 
