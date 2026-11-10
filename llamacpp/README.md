@@ -13,11 +13,8 @@
 - [Faster inference](#faster-inference)
 - [Formats](#formats)
 
-Supports dense Qwen3, Qwen3.8-27B and the listed
-[Qwen and OLMoE text MoEs](#mixture-of-experts). Use the included llama.cpp
-fork for MACaQ GGUFs.
-
-Run all commands from the repository root.
+Run all commands from the repository root. Use the included llama.cpp fork
+for MACaQ GGUFs.
 
 ## Install
 
@@ -102,20 +99,12 @@ same conversion, quantization and generation commands with its local paths.
 
 ## Mixture of experts
 
-The native MoE adapter supports IQ4_XS and IQ4_NL:
-
-| Model | Source checkpoint | Weight license |
-|:---|:---|:---|
-| Qwen3-30B-A3B | [Qwen/Qwen3-30B-A3B](https://huggingface.co/Qwen/Qwen3-30B-A3B) | Apache-2.0 |
-| Qwen3-Coder-30B-A3B | [Qwen/Qwen3-Coder-30B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) | Apache-2.0 |
-| [Qwen3.6-35B-A3B](#qwen36-35b-a3b) | [Qwen/Qwen3.6-35B-A3B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B) | Apache-2.0 |
-| OLMoE-1B-7B | [allenai/OLMoE-1B-7B-0125-Instruct](https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct) | Apache-2.0 |
-| Qwen3-Next-80B-A3B | [Qwen/Qwen3-Next-80B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) | Apache-2.0 |
-| Qwen3.8-Flash-Next | [Qwen/Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | Qwen Community 1.0 |
-
+The native MoE adapter supports IQ4_XS and IQ4_NL. The listed MoE checkpoints
+use Apache-2.0, except Flash-Next, which uses Qwen Community 1.0.
 
 Install `requirements/llamacpp-qwen35.txt` in the native environment. Download
-an original checkpoint from the table with `snapshot_download`, using
+an original checkpoint from the [model table](../README.md#llamacpp)
+with `snapshot_download`, using
 `models/moe-source` as the local directory. Prepare calibration text:
 
 ```bash

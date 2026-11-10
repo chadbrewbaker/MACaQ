@@ -26,9 +26,18 @@ llama.cpp also supports CPU execution.
 Quantize text models to GGUF, save them and generate with the included runtime.
 Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 
-**[Install, quantize and generate →](llamacpp/README.md)** ·
-[Qwen3.8-27B](llamacpp/README.md#hybrid-text-models) ·
-[Text MoE models](llamacpp/README.md#mixture-of-experts)
+**[Install, quantize and generate →](llamacpp/README.md)**
+
+| Model | Instructions |
+|:---|:---|
+| [Qwen3 dense](https://huggingface.co/Qwen/Qwen3-4B) | [Prepare and quantize](llamacpp/README.md#prepare-a-model), with Qwen3-4B as the example |
+| [Qwen3.8-27B](https://huggingface.co/Qwen/Qwen3.8-27B) | [Hybrid text workflow](llamacpp/README.md#hybrid-text-models) |
+| [Qwen3-30B-A3B](https://huggingface.co/Qwen/Qwen3-30B-A3B) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| [Qwen3-Coder-30B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| [Qwen3.6-35B-A3B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B) | [Model-specific recipe](llamacpp/README.md#qwen36-35b-a3b) |
+| [OLMoE-1B-7B-0125-Instruct](https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| [Qwen3-Next-80B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| [Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | [Model-specific recipe](llamacpp/README.md#flash-next) |
 
 <p align="center">
   <a href="docs/assets/qwen3-4b-size-quality.png">
