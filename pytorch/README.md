@@ -44,7 +44,7 @@ codec. Generation uses the evaluation prompts and writes one WAV per entry.
 ```bash
 uv venv --python 3.12 .venv-chatterbox
 source .venv-chatterbox/bin/activate
-uv pip install --torch-backend=cu130 \
+uv pip install --torch-backend=auto \
   --overrides requirements/chatterbox-overrides.txt -r requirements/chatterbox.txt
 python pytorch/chatterbox_turbo.py download --output models/chatterbox-source
 python pytorch/prepare_chatterbox_calibration.py --output data/chatterbox
