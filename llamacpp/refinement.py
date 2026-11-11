@@ -99,8 +99,27 @@ def _verify(source, result, changed):
                 raise ValueError('Native block scales changed: ' + x.name)
 
 
+def _template_without_comments(template):
+    from jinja2 import Environment
+    # Map lexer positions back to the original line endings.
+    characters = list(re.finditer(r'\r\n|.', template, flags=re.DOTALL))
+    normalized = ''.join('\n' if m[0] in ('\r', '\r\n') else m[0] for m in characters)
+    offsets = [m.start() for m in characters] + [len(template)]
+    cursor, edits = 0, []
+    for _, kind, text in Environment().lex(normalized):
+        if not text:
+            continue
+        start = normalized.index(text, cursor)
+        cursor = start + len(text)
+        if kind == 'comment':
+            edits.append((offsets[start], offsets[cursor]))
+    for start, end in reversed(edits):
+        template = template[:start] + ' ' + template[end:]
+    return template
+
+
 def _publish(partial, output):
-    """Declare absent optional prediction layers for original-basis Qwen GGUFs."""
+    """Write refinement metadata and preserve native tensor payloads."""
     import gguf
     reader = gguf.GGUFReader(partial)
     arch = reader.fields['general.architecture'].contents()
@@ -112,14 +131,32 @@ def _publish(partial, output):
         if any((match := re.match(r'blk\.(\d+)\.', t.name)) and int(match[1]) >= blocks
                for t in reader.tensors):
             raise ValueError('Declare the input prediction-layer metadata before refinement')
-    if not normalize:
-        del reader
-        partial.replace(output)
-        return False
+    extra = {'general.quantized_by': 'Huawei-CSL',
+             'general.repo_url': 'https://github.com/huawei-csl/MACaQ',
+             'macaq.method': 'MACaQ-R'}
+    drop_keys = {name for name in reader.fields if name.startswith('quantize.imatrix.')}
+    template_key = 'tokenizer.chat_template'
+    if template_key in reader.fields:
+        template = _template_without_comments(reader.fields[template_key].contents())
+        if template != reader.fields[template_key].contents():
+            extra[template_key] = template
+    if normalize:
+        extra[key] = 0
     from macaq_refine_gguf import write_refined_gguf
     pending = output.with_suffix('.normalized.gguf')
-    write_refined_gguf(reader, str(pending), {}, {key: 0})
+    write_refined_gguf(reader, str(pending), {}, extra, drop_keys=drop_keys)
     check = gguf.GGUFReader(pending)
+    for name, value in extra.items():
+        if name not in check.fields or check.fields[name].contents() != value:
+            raise ValueError('Refinement metadata was not saved: ' + name)
+    if drop_keys.intersection(check.fields):
+        raise ValueError('Output retained obsolete calibration metadata')
+    for name, field in reader.fields.items():
+        if name in extra or name in drop_keys or name.startswith('GGUF.'):
+            continue
+        if (name not in check.fields or field.types != check.fields[name].types
+                or field.contents() != check.fields[name].contents()):
+            raise ValueError('Unrelated GGUF metadata changed: ' + name)
     if len(check.tensors) != len(reader.tensors):
         raise ValueError('Normalized GGUF has an incomplete tensor directory')
     # The writer copied native bytes directly; verify payload identity before publishing.
@@ -138,7 +175,7 @@ def _publish(partial, output):
     del reader, check
     pending.replace(output)
     partial.unlink()
-    return True
+    return normalize
 
 
 def refine(args):

@@ -161,11 +161,13 @@ def field_scalar(reader: GGUFReader, key: str, default=None):
     return f.contents()
 
 
-def write_refined_gguf(reader: GGUFReader, out_path: str, refined: dict[str, np.ndarray], extra_kv: dict):
+def write_refined_gguf(reader: GGUFReader, out_path: str, refined: dict[str, np.ndarray], extra_kv: dict,
+                       drop_keys=()):
     arch = field_scalar(reader, gguf.Keys.General.ARCHITECTURE)
     writer = GGUFWriter(out_path, arch, endianess=reader.endianess)
     for field in reader.fields.values():
-        if field.name == gguf.Keys.General.ARCHITECTURE or field.name.startswith("GGUF."):
+        if (field.name == gguf.Keys.General.ARCHITECTURE or field.name.startswith("GGUF.")
+                or field.name in drop_keys or field.name in extra_kv):
             continue
         val_type = field.types[0]
         sub_type = field.types[-1] if val_type == GGUFValueType.ARRAY else None

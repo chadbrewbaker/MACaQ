@@ -9,3 +9,4 @@ tqdm>=4.27
 pyyaml>=5.1
 requests>=2.25
 sentencepiece==0.2.2
+jinja2>=3.1
