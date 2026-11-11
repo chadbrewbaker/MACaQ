@@ -16,6 +16,7 @@ please star [this repository](https://github.com/huawei-csl/MACaQ) to support th
 - [Choose your backend](#choose-your-backend)
 - [Diffusers](#diffusers)
 - [llama.cpp](#llamacpp)
+  - [MACaQ-R with standard llama.cpp](#macaq-r-with-standard-llamacpp)
 - [vLLM](#vllm)
 - [PyTorch](#pytorch)
 - [Ascend](#ascend)
@@ -58,7 +59,7 @@ Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 | `Qwen/Qwen3.8-27B` | [Hybrid text workflow](llamacpp/README.md#hybrid-text-models) |
 | `Qwen/Qwen3-30B-A3B` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
 | `Qwen/Qwen3-Coder-30B-A3B-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
-| `Qwen/Qwen3.6-35B-A3B` | [Model-specific recipe](llamacpp/README.md#qwen36-35b-a3b) |
+| `Qwen/Qwen3.6-35B-A3B` | [MACaQ](llamacpp/README.md#qwen36-35b-a3b) · [MACaQ-R](llamacpp/README.md#macaq-r) |
 | `allenai/OLMoE-1B-7B-0125-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
 | `Qwen/Qwen3-Next-80B-A3B-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
 | `Qwen/Qwen3.8-Flash-Next` | [Model-specific recipe](llamacpp/README.md#flash-next) |
@@ -72,6 +73,40 @@ Compare MACaQ with published Qwen3-4B GGUFs by file size and KL divergence to FP
 </p>
 
 For more details about the models compared, see the [MACaQ blog](https://huawei-csl.com/blog/macaq/).
+
+### MACaQ-R with standard llama.cpp
+
+**MACaQ-R** refines the weight codes in a quantized GGUF while preserving its
+native formats and block scales. Its GGUFs run with a
+[standard llama.cpp installation](https://github.com/ggml-org/llama.cpp#quick-start).
+
+**Qwen3.6-35B-A3B**, KL divergence to FP16 (lower is better):
+
+| Model | GGUF size | KL ↓ |
+|:---|---:|---:|
+| Unsloth UD-Q4_K_XL | 22.36 GB | 0.015731 |
+| **MACaQ-R Q4_K_XL** | **22.36 GB** | **0.013367** |
+
+Create a MACaQ-R model from a quantized MoE GGUF and its matching original source:
+
+```bash
+.venv-llamacpp/bin/python llamacpp/macaq.py refine \
+  --model models/model-q4.gguf --hf models/original \
+  --teacher models/original-f16.gguf --calibration data/calibration.txt \
+  --output models/model-macaq-r.gguf --work-dir work/refinement
+```
+
+[Setup and Qwen3.6-35B-A3B recipe →](llamacpp/README.md#macaq-r)
+
+With a MACaQ-R GGUF saved locally:
+
+```bash
+llama cli -m models/model-macaq-r.gguf
+```
+
+To serve the same file, use `llama serve -m models/model-macaq-r.gguf`.
+For the full MACaQ workflow with activation transforms, use the
+[bundled-runtime guide](llamacpp/README.md).
 
 ## vLLM
 

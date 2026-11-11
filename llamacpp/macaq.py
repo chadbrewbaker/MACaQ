@@ -1,4 +1,4 @@
-"""Quantize and run text GGUFs with MACAQ vector-codebook refinement."""
+"""Quantize, refine and run text GGUFs with MACaQ."""
 import argparse
 import hashlib
 import json
@@ -199,6 +199,8 @@ def main():
     sub = ap.add_subparsers(dest='action', required=True)
     from moe_workflow import add_parser as add_moe_parser
     add_moe_parser(sub)
+    from refinement import add_parser as add_refine_parser
+    add_refine_parser(sub)
     q = sub.add_parser('quantize', help='original GGUF + original HF + calibration -> MACAQ VQ GGUF')
     q.add_argument('--model', type=Path, required=True, help='original GGUF or first split')
     q.add_argument('--calibration', type=Path, required=True, help='UTF-8 calibration text')
@@ -229,6 +231,13 @@ def main():
         parser.add_argument('--gpu', type=int, default=0, help='only physical GPU exposed to the process')
         parser.add_argument('--gpu-layers', type=int, default=0, help='offloaded layers; 0 uses CPU')
     args = ap.parse_args()
+    if args.action == 'refine':
+        try:
+            from refinement import refine
+            refine(args)
+        except (ValueError, OSError, RuntimeError, subprocess.CalledProcessError) as error:
+            ap.exit(1, f'{error}\n')
+        return
     if args.action == 'quantize-moe':
         try:
             from moe_workflow import quantize as quantize_moe
