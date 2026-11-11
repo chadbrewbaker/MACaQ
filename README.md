@@ -3,8 +3,8 @@
 **Contents**
 
 - [Choose your backend](#choose-your-backend)
-- [llama.cpp](#llamacpp)
 - [Diffusers](#diffusers)
+- [llama.cpp](#llamacpp)
 - [vLLM](#vllm)
 - [PyTorch](#pytorch)
 - [Ascend](#ascend)
@@ -16,13 +16,20 @@ please star [this repository](https://github.com/huawei-csl/MACaQ) to support th
 
 ## Choose your backend
 
-- **[llama.cpp](llamacpp/README.md)**: text generation, 2/3/4-bit GGUF.
 - **[Diffusers](diffusers/README.md)**: image, video and audio generation, W4A4.
+- **[llama.cpp](llamacpp/README.md)**: text generation, 2/3/4-bit GGUF.
 - **[vLLM](vllm/README.md)**: text generation and serving, W4A4 or weight-only.
 - **[PyTorch](pytorch/README.md)**: speech generation, W4A4.
 
 Use Python 3.12 and a separate environment for each backend.
 llama.cpp also supports CPU execution.
+
+## Diffusers
+
+Quantize diffusion transformers, save safetensors checkpoints and generate
+images, video or audio. Image-to-video uses conditioning images during calibration.
+
+**[Install, quantize and generate →](diffusers/README.md)**
 
 ## llama.cpp
 
@@ -51,13 +58,6 @@ Compare MACaQ with published Qwen3-4B GGUFs by file size and KL divergence to FP
 </p>
 
 For more details about the models compared, see the [MACaQ blog](https://huawei-csl.com/blog/macaq/).
-
-## Diffusers
-
-Quantize diffusion transformers, save safetensors checkpoints and generate
-images, video or audio. Image-to-video uses conditioning images during calibration.
-
-**[Install, quantize and generate →](diffusers/README.md)**
 
 ## vLLM
 
