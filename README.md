@@ -39,6 +39,8 @@ Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 | [Qwen3-Next-80B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
 | [Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | [Model-specific recipe](llamacpp/README.md#flash-next) |
 
+Compare MACaQ with published Qwen3-4B GGUFs by file size and KL divergence to FP16.
+
 <p align="center">
   <a href="docs/assets/qwen3-4b-size-quality.png">
     <img src="docs/assets/qwen3-4b-size-quality.png" alt="Qwen3-4B: complete GGUF size versus KL divergence to FP16" width="900">
