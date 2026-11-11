@@ -89,6 +89,10 @@ and writes the GGUF with a `.recipe.json` sidecar. Allow disk space for an
 intermediate full-precision GGUF. Keep evaluation text separate from calibration.
 A short integration run can use `--context 128 --ubatch 128 --chunks 2`.
 
+For both dense and MoE models, increasing `--vq-sweeps` (default: `2`) to
+`4` or `8` can improve quantization quality. More passes take longer to
+quantize, while the GGUF format and file size stay the same.
+
 ## Hybrid text models
 
 For Qwen3.8-27B, install the hybrid model dependencies:
