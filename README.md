@@ -31,6 +31,12 @@ images, video or audio. Image-to-video uses conditioning images during calibrati
 
 **[Install, quantize and generate →](diffusers/README.md)**
 
+| Model | Instructions |
+|:---|:---|
+| `black-forest-labs/FLUX.2-klein-4B` | [Image generation](diffusers/README.md#image-models) |
+| `Wan-AI/Wan2.2-TI2V-5B-Diffusers` | [Video and image-to-video](diffusers/README.md#video-and-image-to-video) |
+| `ylacombe/stable-audio-1.0` | [Audio generation](diffusers/README.md#audio) |
+
 ## llama.cpp
 
 Quantize text models to GGUF, save them and generate with the included runtime.
@@ -40,14 +46,14 @@ Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 
 | Model | Instructions |
 |:---|:---|
-| [Qwen3 dense](https://huggingface.co/Qwen/Qwen3-4B) | [Prepare and quantize](llamacpp/README.md#prepare-a-model), with Qwen3-4B as the example |
-| [Qwen3.8-27B](https://huggingface.co/Qwen/Qwen3.8-27B) | [Hybrid text workflow](llamacpp/README.md#hybrid-text-models) |
-| [Qwen3-30B-A3B](https://huggingface.co/Qwen/Qwen3-30B-A3B) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
-| [Qwen3-Coder-30B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Coder-30B-A3B-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
-| [Qwen3.6-35B-A3B](https://huggingface.co/Qwen/Qwen3.6-35B-A3B) | [Model-specific recipe](llamacpp/README.md#qwen36-35b-a3b) |
-| [OLMoE-1B-7B-0125-Instruct](https://huggingface.co/allenai/OLMoE-1B-7B-0125-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
-| [Qwen3-Next-80B-A3B-Instruct](https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct) | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
-| [Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | [Model-specific recipe](llamacpp/README.md#flash-next) |
+| `Qwen/Qwen3-4B` | [Dense Qwen3 workflow](llamacpp/README.md#prepare-a-model) |
+| `Qwen/Qwen3.8-27B` | [Hybrid text workflow](llamacpp/README.md#hybrid-text-models) |
+| `Qwen/Qwen3-30B-A3B` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| `Qwen/Qwen3-Coder-30B-A3B-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| `Qwen/Qwen3.6-35B-A3B` | [Model-specific recipe](llamacpp/README.md#qwen36-35b-a3b) |
+| `allenai/OLMoE-1B-7B-0125-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| `Qwen/Qwen3-Next-80B-A3B-Instruct` | [MoE workflow](llamacpp/README.md#mixture-of-experts) |
+| `Qwen/Qwen3.8-Flash-Next` | [Model-specific recipe](llamacpp/README.md#flash-next) |
 
 Compare MACaQ with published Qwen3-4B GGUFs by file size and KL divergence to FP16.
 
