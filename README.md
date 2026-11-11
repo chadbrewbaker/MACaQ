@@ -43,13 +43,14 @@ Supports 2-, 3- and 4-bit [GGUF formats](llamacpp/README.md#formats).
 | [Qwen3.8-Flash-Next](https://huggingface.co/Qwen/Qwen3.8-Flash-Next) | [Model-specific recipe](llamacpp/README.md#flash-next) |
 
 Compare MACaQ with published Qwen3-4B GGUFs by file size and KL divergence to FP16.
-For more details about the models compared, see the [MACaQ blog](https://huawei-csl.com/blog/macaq/).
 
 <p align="center">
   <a href="docs/assets/qwen3-4b-size-quality.png">
     <img src="docs/assets/qwen3-4b-size-quality.png" alt="Qwen3-4B: complete GGUF size versus KL divergence to FP16" width="900">
   </a>
 </p>
+
+For more details about the models compared, see the [MACaQ blog](https://huawei-csl.com/blog/macaq/).
 
 ## Diffusers
 
