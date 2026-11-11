@@ -12,7 +12,7 @@ from transformers import AutoConfig, AutoTokenizer
 from checkpoint_config import portable_config
 
 from text_stream import Streamer as HFCalibrationStream
-from mxfp4_macaq_v3 import mxfp4_realquant_h, OCPDenseW4A4Linear, _set_module
+from macaq_mxfp4 import mxfp4_realquant_h, OCPDenseW4A4Linear, _set_module
 
 GATES = ('linear_attn.in_proj_a', 'linear_attn.in_proj_b', 'linear_attn.in_proj_ba')
 

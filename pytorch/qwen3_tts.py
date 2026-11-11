@@ -151,7 +151,7 @@ def calibrate(tts, prompts, targets, directory, rows_per_prompt):
 
 def save_checkpoint(tts, source, output, recipe):
     from safetensors.torch import save_file
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
     output.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(dir=output.parent) as temp:
         pending = Path(temp) / "checkpoint"
@@ -201,7 +201,7 @@ def load_checkpoint(path):
     from safetensors.torch import load_file
     from qwen_tts import Qwen3TTSModel, Qwen3TTSTokenizer
     from qwen_tts.core.models import Qwen3TTSConfig, Qwen3TTSForConditionalGeneration, Qwen3TTSProcessor
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
 
     manifest = json.loads((path / "macaq.json").read_text())
     if manifest["format"] != "macaq-qwen3-tts-v1":
@@ -305,7 +305,7 @@ def main():
         raise ValueError("this example supports Qwen3-TTS CustomVoice models")
     if args.action == "quantize":
         from safetensors.torch import load_file
-        from mxfp4_macaq_v3 import mxfp4_realquant_h, OCPDenseW4A4Linear
+        from macaq_mxfp4 import mxfp4_realquant_h, OCPDenseW4A4Linear
         args.work_dir.mkdir(parents=True)
         targets = target_layers(tts.model)
         print(f"Quantizing {len(targets)} speech projections", flush=True)

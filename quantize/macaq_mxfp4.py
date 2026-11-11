@@ -605,7 +605,7 @@ def parse_args():
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument("--model", default="Qwen/Qwen3-0.6B",
                    help="HF model id or local path (the default is small, "
-                        "so `python mxfp4_macaq_v3.py` alone is a working smoke test)")
+                        "so `python macaq_mxfp4.py` alone is a working smoke test)")
     p.add_argument("--n_calib_tokens", type=int, default=2_000_000) #2_000_000
     p.add_argument('--revision', help='source checkpoint revision')
     p.add_argument('--trust-remote-code', action='store_true', help='allow reviewed custom model/tokenizer code; remote sources require an immutable revision')

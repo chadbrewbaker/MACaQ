@@ -58,7 +58,7 @@ from mxfp4_helper import (
     find_snapshot_dir, load_weight_index, ShardCache,
     set_nested_attr, load_block_from_safetensors, capture_layer_input,
 )
-from mxfp4_macaq_v3 import mxfp4_realquant_h, OCPDenseW4A4Linear, MXFP4_BLOCK
+from macaq_mxfp4 import mxfp4_realquant_h, OCPDenseW4A4Linear, MXFP4_BLOCK
 
 ST_BLOCKS_PREFIX = "model.language_model.layers."
 ST_TEXT_TOPLEVEL = {

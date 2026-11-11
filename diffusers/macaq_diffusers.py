@@ -64,7 +64,7 @@ def quantize(transformer, run_calibration, family, flips=512, max_rows=1024, pro
              keep_layers=()):
     import fnmatch
     import torch
-    from mxfp4_macaq_v3 import mxfp4_realquant_h, OCPDenseW4A4Linear
+    from macaq_mxfp4 import mxfp4_realquant_h, OCPDenseW4A4Linear
 
     if flips < 1 or max_rows < 1:
         raise ValueError("flips and max_rows must be positive")
@@ -148,7 +148,7 @@ def quantize(transformer, run_calibration, family, flips=512, max_rows=1024, pro
 def save_checkpoint(transformer, output, recipe):
     import torch
     from safetensors.torch import save_file
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
 
     recipe = portable_config(recipe)
     if isinstance(recipe.get('source'), dict):
@@ -220,7 +220,7 @@ def file_hash(path):
 def load_checkpoint(transformer, checkpoint):
     import torch
     from safetensors.torch import load_file
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
 
     checkpoint = Path(checkpoint)
     manifest = json.loads((checkpoint / "macaq.json").read_text())

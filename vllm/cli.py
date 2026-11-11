@@ -127,7 +127,7 @@ def main():
             parser.error("supported text adapters are listed in vllm/README.md")
         command = [
             sys.executable,
-            str(ROOT / "quantize/mxfp4_macaq_v3.py"),
+            str(ROOT / "quantize/macaq_mxfp4.py"),
             "--model",
             args.model,
             "--calib-file",
@@ -145,6 +145,9 @@ def main():
             str(args.flips),
             "--no-compile_flip",
         ]
+        revision = args.revision or getattr(cfg, "_commit_hash", None)
+        if revision is not None:
+            command.extend(["--revision", revision])
         subprocess.run(command, check=True)
         return
     if args.context < 32 or args.kv_cache_mib < 1:

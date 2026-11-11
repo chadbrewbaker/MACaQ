@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """convert_macaq_to_gguf.py , MACAQ MXFP4 W4A4 checkpoint -> GGUF for llama.cpp.
 
-Takes a directory written by `quantize/mxfp4_macaq_v3.py --save_dir ...` (i.e. by
+Takes a directory written by `quantize/macaq_mxfp4.py --save_dir ...` (i.e. by
 `save_macaq_vllm.save_macaq_checkpoint`) and produces a .gguf that the vendored
 llama.cpp in ./llama.cpp can run.
 

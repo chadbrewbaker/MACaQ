@@ -75,7 +75,7 @@ def source_identity(path):
 
 def save_checkpoint(tts, source, output, recipe):
     from safetensors.torch import save_file
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
     output.parent.mkdir(parents=True, exist_ok=True)
     if output.exists():
         raise ValueError("choose a fresh checkpoint directory")
@@ -106,7 +106,7 @@ def load_checkpoint(path, device="cuda"):
     from chatterbox.models.t3.modules.t3_config import T3Config
     from chatterbox.models.voice_encoder import VoiceEncoder
     from chatterbox.models.s3gen import S3Gen
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+    from macaq_mxfp4 import OCPDenseW4A4Linear
     manifest = json.loads((path / "macaq.json").read_text())
     if manifest["format"] != "macaq-chatterbox-turbo-v1":
         raise ValueError("unsupported speech checkpoint")
@@ -173,7 +173,7 @@ def synthesize(tts, prompt):
 def quantize(tts, prompts, source, output, work, rows_per_prompt, flips):
     import torch
     from safetensors.torch import save_file, load_file
-    from mxfp4_macaq_v3 import OCPDenseW4A4Linear, mxfp4_realquant_h
+    from macaq_mxfp4 import OCPDenseW4A4Linear, mxfp4_realquant_h
     targets = projections(tts.t3)
     chunks = {name: [] for name in targets}
     handles = []

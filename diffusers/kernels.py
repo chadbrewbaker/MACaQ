@@ -4,7 +4,7 @@ import torch
 import fnmatch
 import triton
 import triton.language as tl
-from mxfp4_macaq_v3 import OCPDenseW4A4Linear
+from macaq_mxfp4 import OCPDenseW4A4Linear
 from macaq_vllm_mxfp4_dense import rot_scale_quantize_mxfp4
 
 

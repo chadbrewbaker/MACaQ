@@ -51,8 +51,8 @@ def _rot_scale_quant_kernel(x_ptr, ps_ptr, bh_ptr, pk_ptr, sc_ptr, K,
     gid = g0 + tl.arange(0, BLOCK_G)                         # (G,)
     cols = tl.arange(0, 32)                                  # within-group cols
     off = gid[:, None] * 32 + cols[None, :]                  # (G,32)
-    x = tl.load(x_ptr + row * stride_xr + off).to(tl.float32)
-    ps = tl.load(ps_ptr + off).to(tl.float32)               # per-channel pre_scale
+    x = tl.load(x_ptr + row * stride_xr + off, mask=gid[:, None] < K // 32, other=0).to(tl.float32)
+    ps = tl.load(ps_ptr + off, mask=gid[:, None] < K // 32, other=1).to(tl.float32)               # per-channel pre_scale
     xs = (x * ps).to(tl.bfloat16)                            # scaled (G,32)
     bh = tl.load(bh_ptr + cols[:, None] * 32 + cols[None, :]).to(tl.bfloat16)  # (32,32)
     r = tl.dot(xs, bh, out_dtype=tl.float32)                # rotated (G,32)
@@ -75,16 +75,16 @@ def _rot_scale_quant_kernel(x_ptr, ps_ptr, bh_ptr, pk_ptr, sc_ptr, K,
     packed = (nlo | (nhi << 4)).to(tl.uint8)                # (G,16)
     half = tl.arange(0, 16)
     pk_off = row * stride_pr + gid[:, None] * 16 + half[None, :]
-    tl.store(pk_ptr + pk_off, packed)
+    tl.store(pk_ptr + pk_off, packed, mask=gid[:, None] < K // 32)
     sc = (e + 127.0).to(tl.uint8)
     if BLOCKED:
         # 128x4 tiles; within a tile the 128 rows land at (r%32)*16 + (r//32)*4.
         r = row % 128
         off_s = ((row // 128) * (512 * NCB) + (gid // 4) * 512
                  + (r % 32) * 16 + (r // 32) * 4 + (gid % 4))
-        tl.store(sc_ptr + off_s, sc)
+        tl.store(sc_ptr + off_s, sc, mask=gid < K // 32)
     else:
-        tl.store(sc_ptr + row * stride_sr + gid, sc)
+        tl.store(sc_ptr + row * stride_sr + gid, sc, mask=gid < K // 32)
 
 
 def blocked_scale_shape(rows: int, cols: int):
@@ -105,16 +105,17 @@ def rot_scale_quantize_mxfp4(x, pre_scale, BH, blocked=False):
     packed = torch.empty(T, K // 2, dtype=torch.uint8, device=x.device)
     if blocked:
         pr, pc = blocked_scale_shape(T, Kg)
-        e8m0 = torch.empty(pr, pc, dtype=torch.uint8, device=x.device)
-        # The kernel writes only the T valid rows; pad rows are interleaved into
-        # the last row-tile, so zero that tile rather than a trailing slice.
-        if T % 128 or Kg % 4:
-            e8m0.view(-1)[(T // 128) * 512 * (pc // 4):] = 0
+        if Kg % 4:
+            e8m0 = torch.zeros(pr, pc, dtype=torch.uint8, device=x.device)
+        else:
+            e8m0 = torch.empty(pr, pc, dtype=torch.uint8, device=x.device)
+            if T % 128:
+                e8m0.view(-1)[(T // 128) * 512 * (pc // 4):] = 0
     else:
         e8m0 = torch.empty(T, Kg, dtype=torch.uint8, device=x.device)
     ps = (pre_scale if pre_scale is not None
           else torch.ones(K, device=x.device, dtype=x.dtype)).contiguous()
-    BLOCK_G = min(Kg, 16)
+    BLOCK_G = 16
     grid = (T, triton.cdiv(Kg, BLOCK_G))
     _rot_scale_quant_kernel[grid](
         x, ps, BH.contiguous(), packed, e8m0, K,

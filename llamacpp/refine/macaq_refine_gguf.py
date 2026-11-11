@@ -14,7 +14,7 @@ does per linear), each linear's Hessian is carried into MACAQ's frame,
 
 and the tensor's level codes are refined by MACAQ's greedy flip sweeps (one flip per output row
 per sweep, delta = c^2 H_jj - 2 c g, g = H~ (w~ - w^)), with the block scales frozen -- exactly
-the objective and procedure `mxfp4_macaq_v3.flip_refine_levels` uses for the MXFP4 codes.
+the objective and procedure `macaq_mxfp4.flip_refine_levels` uses for the MXFP4 codes.
 The refined codes are packed back bit-exactly and a new GGUF is written.
 
 Supported tensor types: IQ4_NL, IQ4_XS, Q3_K, Q4_K, Q5_K, Q6_K, IQ2_XXS, IQ2_XS, IQ3_S, IQ3_XXS. Others pass through.
