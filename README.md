@@ -1,5 +1,11 @@
 ![MACaQ: Model Agnostic Calibrated Quantization](docs/assets/macaq-banner.png)
 
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache_2.0-00bcd4?style=flat-square" alt="License: Apache 2.0"></a>
+  <a href="https://arxiv.org/abs/2611.10649"><img src="https://img.shields.io/badge/arXiv-2611.10649-ff5b63?style=flat-square" alt="arXiv: 2611.10649"></a>
+  <a href="https://huggingface.co/collections/huawei-csl/macaq"><img src="https://img.shields.io/badge/Hugging_Face-Models-ffd21e?style=flat-square" alt="Hugging Face Models"></a>
+</p>
+
 **High-quality GGUF for local inference. Model-agnostic quantization beyond text.**
 
 Quantize and run text, image, video and audio models with llama.cpp, vLLM,
