@@ -80,6 +80,8 @@ For more details about the models compared, see the [MACaQ blog](https://huawei-
 native formats and block scales. Its GGUFs run with a
 [standard llama.cpp installation](https://github.com/ggml-org/llama.cpp#quick-start).
 
+**[Download Qwen3.6-35B-A3B MACaQ-R GGUF on Hugging Face →](https://huggingface.co/huawei-csl/Qwen3.6-35B-A3B-MACaQ-R-GGUF)**
+
 **Qwen3.6-35B-A3B**, KL divergence to FP16 (lower is better):
 
 | Model | GGUF size | KL ↓ |
